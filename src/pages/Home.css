@@ -1,0 +1,74 @@
+.input:focus+.underline {
+  transform: scale(1);
+}
+
+.static-underline {
+  position: absolute;
+  top: 152px;
+  left: 53px;
+  background-color: #a8a8a8;
+  display: inline-block;
+  height: 1px;
+  width: 394px;
+}
+
+.underline {
+  position: absolute;
+  top: 152px;
+  left: 53px;
+  background-color: #009da8;
+  display: inline-block;
+  height: 4px;
+  border-radius: 20%;
+  -webkit-transform: scale(0, 1);
+  transform: scale(0, 1);
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+  width: 394px;
+}
+
+.form-check-input:checked{
+  color: #009da8;
+  border-color: #009da8;
+  background-color: #009da8;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.form-check-input:focus{
+  color: #009da8;
+  border-color: #009da8;
+  background-color: none;
+  box-shadow: none;
+}
+
+[data-tooltip] {
+    position: relative; /* Относительное позиционирование */ 
+}
+[data-tooltip]::after {
+    content: attr(data-tooltip); /* Выводим текст */
+    border-radius: 5px;
+    position: absolute; /* Абсолютное позиционирование */
+    width: 700px; /* Ширина подсказки */
+    left: -25px; top: -200px; /* Положение подсказки */
+    background: #009da8; /* Синий цвет фона */
+    color: #fff; /* Цвет текста */
+    padding: 0.5em; /* Поля вокруг текста */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Параметры тени */
+    pointer-events: none; /* Подсказка */
+    opacity: 0; /* Подсказка невидима */
+    transition: 1s; /* Время появления подсказки */
+} 
+[data-tooltip]:hover::after {
+    opacity: 1; /* Показываем подсказку */
+    top: -7em; /* Положение подсказки */
+}
+
+input[type="checkbox"] {
+  transform: scale(1.3);
+}
+
+input[type="checkbox"]:checked {
+  transform: scale(1.3);
+  accent-color: #009da8;
+}

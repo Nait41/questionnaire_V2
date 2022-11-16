@@ -25,9 +25,11 @@ function App() {
   const [dateDirty, setDateDirty] = useState(false);
   const [errorDate, setErrorDate] = useState("Дата взятия образца должна быть указана");
 
-  const [changeCompany, setChangeCompany] = useState(false);
+  const [changeCompany, setChangeCompany] = useState("");
+  const [changeCompanyDirty, setChangeCompanyDirty] = useState(false);
+  const [errorChangeCompany, setErrorChangeCompany] = useState("Направляющее учреждение должно быть указано");
+  
   const [changeSample, setChangeSample] = useState(false);
-  const company = ["First Company", "Second Company", "Third Company", "FourthCompany"];
   const sample = ["First Sample", "Second Sample"];
 
   const [formValid, setFormValid] = useState(false);
@@ -49,6 +51,22 @@ function App() {
       case 'date':
         setDateDirty(true)
         break
+      case 'changeCompany':
+        setChangeCompanyDirty(true)
+        break
+    }
+  }
+
+  const changeCompanyHandler = (e) => {
+    setChangeCompany(e.target.value)
+    if(e.target.value.length < 3 || e.target.value.length > 8)
+    {
+      setErrorChangeCompany("Направляющие учреждение должно содержать от 3 до 15 символов")
+      if(!e.target.value) {
+        setErrorChangeCompany("Направляющее учреждение должно быть указано")
+      }
+    } else {
+      setErrorChangeCompany("")
     }
   }
 
@@ -92,7 +110,7 @@ function App() {
   }
 
   const dateHandler = (e) => {
-    setErrorDate(e.target.value)
+    setDate(e.target.value)
     if(e.target.value){
       setErrorDate("")
     }
@@ -100,12 +118,12 @@ function App() {
 
 useEffect(() => {
   document.body.style.backgroundColor = "#f2ffff"
-  if (errorLabNumber || errorDate || errorEmail || errorTelephoneNumber || !changeCompany || !changeSample){
+  if (errorLabNumber || errorDate || errorEmail || errorTelephoneNumber || errorChangeCompany || !changeSample){
     setFormValid(false)
   } else {
     setFormValid(true)
   }
-}, [errorLabNumber, errorDate, errorEmail, errorTelephoneNumber, changeCompany, changeSample])
+}, [errorLabNumber, errorDate, errorEmail, errorTelephoneNumber, changeCompany, changeSample, errorChangeCompany])
 
   return (
       <div className="App">
@@ -118,7 +136,7 @@ useEffect(() => {
               display: "flex",
               justifyContent: "center",
             }}>
-            <h3>Информация о вас</h3>
+            <h3>Основная информация</h3>
           </Modal.Header>
           <ModalBody>
             <Form>
@@ -191,44 +209,23 @@ useEffect(() => {
                 <input
                   onChange={e => dateHandler(e)} 
                   name="date"
+                  value={date}
                   onBlur={e => changeValidHandler(e)}
                   type="date" 
                   class="form-control"/>
               </Form.Group>
               <Form.Group controlId="formBasicNumber">
                 <Form.Label>Направляющее учреждение</Form.Label>
-                <ul className="list-group">
-                  <li className="list-group-item list-group-item-action">
-                    <input 
-                      className="form-check-input me-1"
-                      checked = {changeCompany == company.at(0)}
-                      onChange = {() => setChangeCompany((current) => company.at(0))}
-                      type="radio"
-                      value="" 
-                      id="Checkbox"/>
-                    <img src="http://toplogos.ru/images/logo-invitro.png" className='col-md-2'/>
-                  </li>
-                  <li className="list-group-item list-group-item-action">
-                    <input 
-                      className="form-check-input me-1"
-                      checked = {changeCompany == company.at(1)}
-                      onChange = {() => setChangeCompany((current) => company.at(1))}
-                      type="radio" 
-                      value="" 
-                      id="Checkbox"/>
-                    <img src="https://cdn1-media.rabota.ru/processor/logo/original/2019/12/16/laboratornaja-sluzhba-kheliks-d4e137f396fbdd884d978612387999cb.jpg" className='col-md-2'/>
-                  </li>
-                  <li className="list-group-item list-group-item-action">
-                    <input 
-                      className="form-check-input me-1"
-                      checked = {changeCompany == company.at(2)}
-                      onChange = {() => setChangeCompany((current) => company.at(2))}
-                      type="radio" 
-                      value="" 
-                      id="Checkbox"/>
-                    <img src="https://cvirus.ru/wp-content/uploads/2020/04/gemotest.jpg" className='col-md-3'/>
-                  </li>
-                </ul>
+                  {(changeCompanyDirty && errorChangeCompany) && <div style={{color:'red'}}>{errorChangeCompany}</div>}
+                  <Form.Control 
+                    type="text" 
+                    placeholder="Укажите направляющее учреждение" 
+                    onBlur={e => changeValidHandler(e)} 
+                    name="changeCompany"
+                    onChange={e => changeCompanyHandler(e)}
+                    value={changeCompany}>
+                  </Form.Control>
+                  <Form.Text className="changeCompany"></Form.Text>
               </Form.Group>
             </Form>
           </ModalBody>
@@ -236,7 +233,7 @@ useEffect(() => {
               display: "flex",
               justifyContent: "center",
             }}>
-            <Button onClick={handleClose} disabled={!formValid} class="btn btn-secondary">Начать анкетирование</Button>
+            <Button onClick={handleClose} disabled={!formValid} class="btn btn-secondary" style={{background: "#009da8", border: "#009da8"}}>Начать анкетирование</Button>
           </Modal.Footer>
         </Modal>
       </div>
